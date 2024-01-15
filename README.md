@@ -8,4 +8,30 @@ Playable Tic-Tac-Toe, functionality is a minimax search algorithm to play the be
 python ttt.py
 ```
 
-## 
+## Commands to Interact
+1. move
+- type "move (player) (row) (collumn)"
+- ex. move X A 1
+- this will make a move on the game board, placing the player on the spot according to the row and collumn
+- player can only be 'X' and 'O'
+- ensure player and row is CAPITAL letters
+
+2. show
+- type "show"
+- this will display the current state of the game board
+
+3. reset
+- type "reset"
+- this will reset the game board to an empty state, allowing to restart the game
+
+4. choose
+- type "choose (player)"
+- this will call the minimax function to make a move for the given player
+
+5. quit
+- type "quit"
+- this will end the program
+
+6. pruning
+- type "pruning"
+- this will run the alpha beta pruning minimax search instead of the normal minimax search
