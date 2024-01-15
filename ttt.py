@@ -5,14 +5,17 @@ winner = 0
 team_x = "X"
 team_o = "O"
 
+#Prints out the Tic-Tac-Toe GameBoard
 def print_gb(gb):
     for item in gb:
         print("\t" + item[0] + "\t|\t" + item[1] + "\t|\t" + item[2] + "\t")
         print("-------------------------------------------------")
 
+#Resets the GameBoard
 def reset_gb():
     return [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
 
+#Places the next move made onto the GameBoard
 def move(gb, team, row, collumn):
     row_p = 0
     if (row == "A"):
@@ -24,6 +27,7 @@ def move(gb, team, row, collumn):
     if (gb[row_p][collumn - 1] == "-"):
         gb[row_p][collumn - 1] = team
 
+#Checks the GameBoard to see if either player has won
 def is_winner(gb, player):
     if (gb[0][0] == gb[0][1] and gb[0][1] == gb[0][2] and gb[0][0] == player):
         return 1
@@ -43,10 +47,12 @@ def is_winner(gb, player):
         return 1
     return 0
 
+#Search algorithm that starts the search by calling the maxscore function, which is the first half of the recursion
 def minimax(gb, player):
     value, action = maxscore(gb, player)
     return (value, action)
 
+#Minscore chooses an empty spot to play a move for the OPPONENT, if all spots on the GameBoard are filled, then the minscore determines if that moves was a winning, losing, or drawing move for the current player
 def minscore(gb, player):
     global nodes
     if (is_end_state(gb)):
@@ -59,7 +65,6 @@ def minscore(gb, player):
         states = available_states(gb)
         for a in states:
             nodes += 1
-            # gb_copy = copy.copy(gb)
             gb_copy = copy.deepcopy(gb)
             move(gb_copy, team_x, a[0], a[1])
             value_2, a2 = maxscore(gb_copy, team_o)
@@ -73,10 +78,6 @@ def minscore(gb, player):
         states = available_states(gb)
         for a in states:
             nodes += 1
-            # print("min")
-            # print(a)
-            # print("min")
-            # gb_copy = copy.deepcopy(gb)
             gb_copy = copy.deepcopy(gb)
             move(gb_copy, team_o, a[0], a[1])
             value_2, a2 = maxscore(gb_copy, team_x)
@@ -88,6 +89,7 @@ def minscore(gb, player):
     
     return (None, None)
 
+#Maxscore chooses an empty spot to play a move for the PLAYER, if all spots on the GameBoard are filled, then the minscore determines if that moves was a winning, losing, or drawing move for the current player
 def maxscore(gb, player):
     global nodes
     if (is_end_state(gb)):
@@ -100,9 +102,6 @@ def maxscore(gb, player):
         states = available_states(gb)
         for a in states:
             nodes += 1
-            # print("max")
-            # print(a)
-            # gb_copy = copy.deepcopy(gb)
             gb_copy = copy.deepcopy(gb)
             move(gb_copy, team_x, a[0], a[1])
             if (end_state(gb_copy, team_x) == 1):
@@ -118,7 +117,6 @@ def maxscore(gb, player):
         states = available_states(gb)
         for a in states:
             nodes += 1
-            # gb_copy = copy.copy(gb)
             gb_copy = copy.deepcopy(gb)
             move(gb_copy, team_o, a[0], a[1])
             if (end_state(gb_copy, team_o) == 1):
@@ -132,10 +130,18 @@ def maxscore(gb, player):
     
     return None
 
+#Similar to the Minimax function above, however also checks for end states along the way
 def alpha_beta_search(gb, player):
     value, action = maxscore_alpha(gb, player, -1, 1)
     return (value, action)
 
+#The Maxscore and Minscore Alpha functions use Alpha Beta Pruning to check if a hypothetical moves brings an end state sooner than filling up the entire board
+
+#i.e.
+#  X | X | X
+#    | O |
+#    | O |
+#This board would be considered an end state because player X has won before all board spots are filled
 def maxscore_alpha(gb, player, alpha, beta):
     global nodes
     if (is_end_state(gb)):
@@ -148,9 +154,6 @@ def maxscore_alpha(gb, player, alpha, beta):
         states = available_states(gb)
         for a in states:
             nodes += 1
-            # print("max")
-            # print(a)
-            # gb_copy = copy.deepcopy(gb)
             gb_copy = copy.deepcopy(gb)
             move(gb_copy, team_x, a[0], a[1])
             if (end_state(gb_copy, team_x) == 1):
@@ -169,7 +172,6 @@ def maxscore_alpha(gb, player, alpha, beta):
         states = available_states(gb)
         for a in states:
             nodes += 1
-            # gb_copy = copy.copy(gb)
             gb_copy = copy.deepcopy(gb)
             move(gb_copy, team_o, a[0], a[1])
             if (end_state(gb_copy, team_o) == 1):
@@ -196,7 +198,6 @@ def minscore_alpha(gb, player, alpha, beta):
         states = available_states(gb)
         for a in states:
             nodes += 1
-            # gb_copy = copy.copy(gb)
             gb_copy = copy.deepcopy(gb)
             move(gb_copy, team_x, a[0], a[1])
             value_2, a2 = maxscore_alpha(gb_copy, team_o, alpha, beta)
@@ -213,10 +214,6 @@ def minscore_alpha(gb, player, alpha, beta):
         states = available_states(gb)
         for a in states:
             nodes += 1
-            # print("min")
-            # print(a)
-            # print("min")
-            # gb_copy = copy.deepcopy(gb)
             gb_copy = copy.deepcopy(gb)
             move(gb_copy, team_o, a[0], a[1])
             value_2, a2 = maxscore_alpha(gb_copy, team_x, alpha, beta)
@@ -231,6 +228,7 @@ def minscore_alpha(gb, player, alpha, beta):
     
     return (None, None)
 
+#Returns all empty positions on the GameBoard
 def available_states(gb):
     states = []
     count = 0
@@ -261,7 +259,7 @@ def available_states(gb):
     return states
 
         
-
+#Checks if the current state of the GameBoard is an end state (i.e. there are no empty spots remainging)
 def is_end_state(gb):
     for item in gb:
         if item[0] == '-':
@@ -272,6 +270,7 @@ def is_end_state(gb):
             return False
     return True
 
+#Checks to see if either player has won, or if there was a draw
 def end_state(gb, player):
     if (player == team_x):
         if (is_winner(gb, "X")):
@@ -285,6 +284,7 @@ def end_state(gb, player):
             return 1
     return 0
 
+#Checks all possible moves to see if possible moves result in blocking the opponent from making a winning move on their immediately following turn
 def block(gb, player):
     if (player == team_x):
         states = available_states(gb)
@@ -303,6 +303,8 @@ def block(gb, player):
 
 
 
+
+#Main function that the user interacts with to play the game
 game_board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
 
 print("Welcome to Tic-Tac-Toe")
