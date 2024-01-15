@@ -9,6 +9,7 @@ python ttt.py
 ```
 
 ## Commands to Interact
+Once the you are running the program, here is a list of commands to interact/play the game.
 1. move
 - type "move (player) (row) (collumn)"
 - ex. move X A 1
@@ -35,3 +36,8 @@ python ttt.py
 6. pruning
 - type "pruning"
 - this will run the alpha beta pruning minimax search instead of the normal minimax search
+  (i.e. a more efficient version of the minimax search algorithm)
+
+## What I Learned
+1. Minimax search algorithm
+2. Alpha Beta Pruning
